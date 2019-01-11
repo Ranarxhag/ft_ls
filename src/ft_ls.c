@@ -15,8 +15,17 @@
 
 int		main(int argc, char **argv)
 {
-	t_config *config;
+	t_lsconfig *config;
 
 	if (!(config = set_config(argc, argv)))
 		exit(EXIT_FAILURE);
+	printf("---- OPTIONS ----\n%s\n", config->options);
+	printf("\n---- PATHS ----\n");
+	
+	int i = 0;
+	while (config->paths[i])
+	{
+		printf("%s\n", config->paths[i]);
+		i++;
+	}
 } 

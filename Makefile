@@ -24,6 +24,9 @@ OBJ  = $(addprefix $(OBJ_DIR)/, $(subst .c,.o, $(SRC_FILES)))
 CC = gcc
 CFLAGS = -Wall -Wextra -Werror
 
+LIB = -L libft/ -lft
+LIBFT_INC = libft/includes
+
 KNRM = "\x1B[0m"
 KGRN = "\x1B[1;32m"
 
@@ -35,14 +38,16 @@ all:
 
 $(NAME): $(OBJ)
 	@echo "Creation de l'executable..."
-	@$(CC) $(OBJ) -o $(NAME)
+	@$(CC) $(OBJ) $(LIB) -o $(NAME)
 
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
 	@echo "Compilation du fichier "$(KGRN)$(notdir $(subst .c,,$<))$(KNRM)
-	@$(CC) $(CFLAGS) -I $(INC_DIR) -o $@ -c $<
+	@$(CC) $(CFLAGS) -I $(LIBFT_INC) -I $(INC_DIR) -o $@ -c $<
 
 clean:
+	rm -rf $(OBJ_DIR)
 
 fclean: clean
+	rm -rf $(NAME)
 
 re: fclean all

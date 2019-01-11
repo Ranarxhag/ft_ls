@@ -13,17 +13,16 @@
 #ifndef FT_LS_H
 # define FT_LS_H
 
-#include <string.h>
 #include <sys/stat.h>
-#include <stdlib.h>
+#include "../libft/includes/libft.h"
 
 #define ALLOWED_OPTIONS "lRart"
 
-typedef struct 		s_config
+typedef struct 		s_lsconfig
 {
 	char	*options;
 	char	**paths;
-}					t_config;
+}					t_lsconfig;
 
 typedef struct 		s_file
 {
@@ -39,6 +38,6 @@ typedef struct 		s_dir
 	struct s_dir	*next;
 }					t_dir;
 
-t_config	set_config(int argc, char **argv);
+t_lsconfig	*set_config(int argc, char **argv);
 
 #endif
