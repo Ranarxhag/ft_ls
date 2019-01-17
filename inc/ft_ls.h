@@ -16,28 +16,36 @@
 #include <sys/stat.h>
 #include "../libft/includes/libft.h"
 
-#define ALLOWED_OPTIONS "lRart"
+/***
+Supprimer plus tard
+*****/
+#include <stdio.h>
 
-typedef struct 		s_lsconfig
-{
-	char	*options;
-	char	**paths;
-}					t_lsconfig;
+#define ALLOWED_OPTIONS "Ralrt"
 
 typedef struct 		s_file
 {
 	char			*name;
-	time_t			last_modification;
+	time_t			date;
 	struct s_file	*next;
 }					t_file;
 
-typedef struct 		s_dir
+typedef struct 		s_command
 {
-	char			*path;
-	t_file			*files;
-	struct s_dir	*next;
-}					t_dir;
+	char	*options;
+	t_file	*paths;
+}					t_command;
 
-t_lsconfig	*set_config(int argc, char **argv);
+t_command			*set_command(int argc, char **argv);
+void				delete_command(t_command *command);
+char				*set_options(int argc, char **argv, int *i);
+t_file				*set_paths(char *options, int argc, char **argv, int i);
+t_file				*new_file(char *name, time_t date);
+void				add_file_last(t_file **list, t_file *file);
+void				add_file_first(t_file **list, t_file *file);
 
+void				no_such_file_or_directory(char *filename);
+void				illegal_option(char c);
+
+int					has_option(char *options, char c);
 #endif

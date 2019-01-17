@@ -15,17 +15,45 @@
 
 int		main(int argc, char **argv)
 {
-	t_lsconfig *config;
+	t_command 	*command;
+	t_file		*paths;
+	//int i;
 
-	if (!(config = set_config(argc, argv)))
+	if (!(command = set_command(argc, argv)))
 		exit(EXIT_FAILURE);
-	printf("---- OPTIONS ----\n%s\n", config->options);
+	paths = command->paths;
+	//i = 0;
+	/*
+	if (ft_array_length(command->paths) == 0)
+		read_dir(".", command->options);
+	else
+	{
+		while (command->paths[i])
+		{
+			read_dir(command->paths[i], command->options, );
+			i++;
+		}
+	}
+	read_dir(command);
+	*/
+
+
+
+
+
+
+
+
+
+
+
+	printf("---- OPTIONS ----\n%s\n", command->options);
 	printf("\n---- PATHS ----\n");
 	
-	int i = 0;
-	while (config->paths[i])
+	while (paths)
 	{
-		printf("%s\n", config->paths[i]);
-		i++;
+		printf("%s\n", paths->name);
+		paths = paths->next;
 	}
+	delete_command(command);
 } 
