@@ -12,13 +12,11 @@
 
 #include "ft_ls.h"
 
-void	sort_by_last_modified(t_file *files)
+void	set_file_order(t_file *files, char *options)
 {
-
+	if (has_option(options, 't'))
+		sort_by_date(files, options);
+	else
+		printf("NTM\n");
 }
 
-void	set_file_order(t_file *files, char *option)
-{
-	if (has_option(option, 't'))
-		sort_by_last_modified(files);
-}

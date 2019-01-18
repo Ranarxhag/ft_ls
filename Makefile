@@ -18,7 +18,9 @@ NAME = ft_ls
 
 SRC_FILES  = ft_ls.c errors.c options.c
 SRC_FILES += command/command.c command/options.c command/paths.c
-SRC_FILES += linked_list/add_file.c linked_list/new_file.c linked_list/order.c
+SRC_FILES += linked_list/add_file.c linked_list/new_file.c linked_list/order_files.c \
+			 linked_list/swap_files.c
+SRC_FILES += linked_list/sort/sort_by_date.c
 
 SRC  = $(addprefix $(SRC_DIR)/, $(SRC_FILES))
 OBJ  = $(addprefix $(OBJ_DIR)/, $(subst .c,.o, $(SRC_FILES)))

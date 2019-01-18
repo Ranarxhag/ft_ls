@@ -14,6 +14,7 @@
 # define FT_LS_H
 
 #include <sys/stat.h>
+#include <time.h>
 #include "../libft/includes/libft.h"
 
 /***
@@ -48,4 +49,9 @@ void				no_such_file_or_directory(char *filename);
 void				illegal_option(char c);
 
 int					has_option(char *options, char c);
+
+void				set_file_order(t_file *files, char *options);
+void				sort_by_date(t_file *files, char *options);
+
+void				swap_files(t_file *file1, t_file *file2);
 #endif

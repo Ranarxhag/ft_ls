@@ -71,6 +71,6 @@ t_file			*set_paths(char *options, int argc, char **argv, int i)
 	{
 
 	}
-	//set_file_order(paths, options);
+	set_file_order(paths, options);
 	return (paths);
 }
