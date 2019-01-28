@@ -25,15 +25,17 @@ void	sort_by_date(t_file *files, char *options)
 	while (!ordered)
 	{
 		ordered = 1;
-		tmp = files;
-		while (tmp->next)
+		files = tmp;
+		while (files->next)
 		{
-			if (tmp->date - tmp->next->date < 0)
+			//printf("%s %ld | %s %ld\n", files->name, files->infos->st_mtime, files->next->name, files->next->infos->st_mtime);
+			if (files->infos->st_mtime < files->next->infos->st_mtime)
 			{
-				swap_files(tmp, tmp->next);
+				swap_files(files, files->next);
 				ordered = 0;
 			}
-			tmp = tmp->next;
+			files = files->next;
 		}
 	}
+	files = tmp;
 }

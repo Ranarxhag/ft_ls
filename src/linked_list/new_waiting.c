@@ -1,26 +1,30 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   order.c                                            :+:      :+:    :+:   */
+/*   new_waiting.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: bjovanov <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/01/17 20:08:27 by bjovanov          #+#    #+#             */
-/*   Updated: 2019/01/17 20:08:29 by bjovanov         ###   ########.fr       */
+/*   Created: 2019/01/23 17:38:07 by bjovanov          #+#    #+#             */
+/*   Updated: 2019/01/23 17:38:08 by bjovanov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_ls.h"
 
-void	set_file_order(t_file *files, char *options)
+t_waiting	*new_waiting(char *pathname)
 {
-	if (files == NULL || count_files(files) == 1)
-		return ;
-	sort_by_ascii(files);
-	if (has_option(options, 't'))
-		sort_by_date(files, options);
+	t_waiting *dir;
 
-	if (has_option(options, 'r'))
-		sort_reverse(&files);
+	if (pathname == NULL)
+		return (NULL);
+	if(!(dir = malloc(sizeof(*dir))))
+		return (NULL);
+	if (!(dir->path = ft_strdup((const char *)pathname)))
+	{
+		ft_memdel((void**)&(dir));
+		return (NULL);
+	}
+	dir->next = NULL;
+	return (dir);
 }
-

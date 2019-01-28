@@ -12,7 +12,7 @@
 
 #include "ft_ls.h"
 
-t_file	*new_file(char *name, time_t date)
+t_file	*new_file(char *name, struct stat *fileinfo)
 {
 	t_file *file;
 
@@ -23,7 +23,7 @@ t_file	*new_file(char *name, time_t date)
 		ft_memdel((void**)&(file));
 		return (NULL);
 	}
-	file->date = date;
+	file->infos = fileinfo;
 	file->next = NULL;
 	return (file);
 }

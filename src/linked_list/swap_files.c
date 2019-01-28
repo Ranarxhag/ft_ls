@@ -12,23 +12,14 @@
 
 #include "ft_ls.h"
 
-static void	swap_file1(t_file *file1, t_file *file2)
-{
-	file1->name = file2->name;
-	file1->date = file2->date;
-}
-
-static void	swap_file2(t_file *file2, t_file *file1)
-{
-	file2->name = file1->name;
-	file2->date = file1->date;
-}
-
 void		swap_files(t_file *file1, t_file *file2)
 {
-	t_file *tmp;
+	t_file tmp;
 
-	tmp = file1;
-	swap_file1(file1, file2);
-	swap_file2(file2, tmp);
+	tmp.name = file1->name;
+	tmp.infos = file1->infos;
+	file1->name = file2->name;
+	file1->infos = file2->infos;
+	file2->name = tmp.name;
+	file2->infos = tmp.infos;
 }

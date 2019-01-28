@@ -28,49 +28,6 @@ void			delete_command(t_command *command)
 	ft_memdel((void**)&(command));
 }
 
-/*
-static int		delete_command(t_command *command, int state)
-{
-	int i;
-
-	i = 0;
-	ft_strdel(&(command->options));
-	free(command);
-	command = NULL;
-	return (state);
-}
-
-static int			is_valid_command(t_command *command)
-{
-	int i;
-
-	i = 0;
-	while (command->options[i])
-	{
-		if (!ft_strchr((const char*)ALLOWED_OPTIONS, command->options[i]))
-		{
-			ft_printf("ft_ls: illegal option -- %c\n"
-					  "usage: ft_ls [-%s] [file ...]\n",
-			command->options[i], ALLOWED_OPTIONS);
-			return (delete_command(command, 0));
-		}
-		i++;
-	}
-	i = 0;
-	while (command->paths[i])
-	{
-		if (ft_strequ(command->paths[i], "") == 1)
-		{
-			perror("ft_ls: ");
-			ft_printf("ft_ls: fts_open: No such file or directory\n");
-			return (delete_command(command, 0));
-		}
-		i++;
-	}
-	return (1);
-}
-*/
-
 t_command		*set_command(int argc, char **argv)
 {
 	t_command *command;

@@ -1,26 +1,38 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   order.c                                            :+:      :+:    :+:   */
+/*   get_files.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: bjovanov <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/01/17 20:08:27 by bjovanov          #+#    #+#             */
-/*   Updated: 2019/01/17 20:08:29 by bjovanov         ###   ########.fr       */
+/*   Created: 2019/01/21 18:55:07 by bjovanov          #+#    #+#             */
+/*   Updated: 2019/01/21 18:55:09 by bjovanov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_ls.h"
 
-void	set_file_order(t_file *files, char *options)
+t_file		*get_file_at_position(t_file *files, int position)
 {
-	if (files == NULL || count_files(files) == 1)
-		return ;
-	sort_by_ascii(files);
-	if (has_option(options, 't'))
-		sort_by_date(files, options);
+	int i;
+	t_file *file;
 
-	if (has_option(options, 'r'))
-		sort_reverse(&files);
+	i = 0;
+	file = files;
+	while (i < position)
+	{
+		file = file->next;
+		i++;
+	}
+	return (file);
 }
 
+t_file	*get_last_file(t_file *files)
+{
+	t_file *file;
+
+	file = files;
+	while (file->next)
+		file = file->next;
+	return (file);
+}

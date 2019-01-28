@@ -1,26 +1,28 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   order.c                                            :+:      :+:    :+:   */
+/*   count_files.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: bjovanov <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/01/17 20:08:27 by bjovanov          #+#    #+#             */
-/*   Updated: 2019/01/17 20:08:29 by bjovanov         ###   ########.fr       */
+/*   Created: 2019/01/21 19:13:43 by bjovanov          #+#    #+#             */
+/*   Updated: 2019/01/21 19:13:44 by bjovanov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_ls.h"
 
-void	set_file_order(t_file *files, char *options)
+int		count_files(t_file *files)
 {
-	if (files == NULL || count_files(files) == 1)
-		return ;
-	sort_by_ascii(files);
-	if (has_option(options, 't'))
-		sort_by_date(files, options);
+	t_file *tmp;
+	int length;
 
-	if (has_option(options, 'r'))
-		sort_reverse(&files);
+	length = 0;
+	tmp = files;
+	while (tmp)
+	{
+		length++;
+		tmp = tmp->next;
+	}
+	return (length);
 }
-

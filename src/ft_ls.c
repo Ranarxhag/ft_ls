@@ -13,47 +13,72 @@
 #include "ft_ls.h"
 #include <stdio.h>
 
+int		read_arg_dir(t_file *paths, t_command *command, int newline)
+{
+	t_file 	*tmp;
+
+	tmp = paths;
+	while (tmp)
+	{
+		if (tmp->infos && tmp->infos->st_mode & S_IFDIR)
+		{
+			if (!(read_directory(tmp->name, command, newline,
+				count_files(paths))))
+				return (-1);
+			if (newline == 0)
+				newline++;
+		}
+		tmp = tmp->next;
+	}
+
+	return (1);
+}
+
+int		read_args_files(t_file *paths, t_command *command)
+{
+	t_file	*tmp;
+	int		count;
+
+	count = 0;
+	tmp = paths;
+	while (tmp)
+	{
+		if (tmp->infos && !(tmp->infos->st_mode & S_IFDIR))
+		{
+			read_file(tmp, command);
+			count++;
+		}
+		tmp = tmp->next;
+	}
+	return (count);
+}
+
+int		read_args(t_file *paths, t_command *command)
+{
+	int		newline;
+
+	if (paths == NULL)
+	{
+		read_directory(".", command, 0, 0);
+		return (1);
+	}
+	if ((newline = read_args_files(paths, command)) == -1)
+		return (-1);
+	if (read_arg_dir(paths, command, newline > 0 ? 1 : 0) == -1)
+		return (-1);
+	delete_command(command);
+	return (1);
+}
+
 int		main(int argc, char **argv)
 {
 	t_command 	*command;
-	t_file		*paths;
-	//int i;
 
 	if (!(command = set_command(argc, argv)))
 		exit(EXIT_FAILURE);
-	paths = command->paths;
-	//i = 0;
-	/*
-	if (ft_array_length(command->paths) == 0)
-		read_dir(".", command->options);
-	else
+	if ((read_args(command->paths, command)) == -1)
 	{
-		while (command->paths[i])
-		{
-			read_dir(command->paths[i], command->options, );
-			i++;
-		}
+		delete_command(command);
+		exit(EXIT_FAILURE);
 	}
-	read_dir(command);
-	*/
-
-
-
-
-
-
-
-
-
-
-
-	printf("---- OPTIONS ----\n%s\n", command->options);
-	printf("\n---- PATHS ----\n");
-	
-	while (paths)
-	{
-		printf("%s\n", paths->name);
-		paths = paths->next;
-	}
-	delete_command(command);
 } 

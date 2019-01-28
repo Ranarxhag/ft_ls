@@ -30,3 +30,11 @@ void	illegal_option(char c)
 	ft_putstr_fd(ALLOWED_OPTIONS, 2);
 	ft_putendl_fd("] [file ...]", 2);
 }
+
+int		error_opendir(char *dirname)
+{
+	ft_putstr_fd("ft_ls: ", 2);
+	perror(&(dirname[ft_strlen(dirname) - ft_strlen(
+		ft_strrchr(dirname, '/')) + 1]));
+	return (0);
+}

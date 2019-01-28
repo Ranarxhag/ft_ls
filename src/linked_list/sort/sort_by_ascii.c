@@ -1,26 +1,37 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   order.c                                            :+:      :+:    :+:   */
+/*   sort_by_ascii.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: bjovanov <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/01/17 20:08:27 by bjovanov          #+#    #+#             */
-/*   Updated: 2019/01/17 20:08:29 by bjovanov         ###   ########.fr       */
+/*   Created: 2019/01/23 17:45:55 by bjovanov          #+#    #+#             */
+/*   Updated: 2019/01/23 17:45:56 by bjovanov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_ls.h"
 
-void	set_file_order(t_file *files, char *options)
+void	sort_by_ascii(t_file *files)
 {
-	if (files == NULL || count_files(files) == 1)
-		return ;
-	sort_by_ascii(files);
-	if (has_option(options, 't'))
-		sort_by_date(files, options);
+	int		ordered;
+	t_file	*tmp;
 
-	if (has_option(options, 'r'))
-		sort_reverse(&files);
+	ordered = 0;
+	tmp = files;
+	while (!ordered)
+	{
+		ordered = 1;
+		files = tmp;
+		while (files->next)
+		{
+			if (ft_strcmp(files->name, files->next->name) > 0)
+			{
+				swap_files(files, files->next);
+				ordered = 0;
+			}
+			files = files->next;
+		}
+	}
+	files = tmp;
 }
-

@@ -17,10 +17,20 @@ INC_DIR = ./inc
 NAME = ft_ls
 
 SRC_FILES  = ft_ls.c errors.c options.c
+
+SRC_FILES += files/read_file.c files/read_files.c
+
+SRC_FILES += directories/read_directory.c
+
 SRC_FILES += command/command.c command/options.c command/paths.c
+
 SRC_FILES += linked_list/add_file.c linked_list/new_file.c linked_list/order_files.c \
-			 linked_list/swap_files.c
-SRC_FILES += linked_list/sort/sort_by_date.c
+			 linked_list/swap_files.c linked_list/get_files.c linked_list/count_files.c \
+			 linked_list/add_waiting.c linked_list/new_waiting.c
+			 
+SRC_FILES += linked_list/sort/sort_by_date.c linked_list/sort/sort_reverse.c \
+			 linked_list/sort/sort_by_ascii.c
+			 
 
 SRC  = $(addprefix $(SRC_DIR)/, $(SRC_FILES))
 OBJ  = $(addprefix $(OBJ_DIR)/, $(subst .c,.o, $(SRC_FILES)))
@@ -43,8 +53,6 @@ all:
 $(NAME): $(OBJ)
 	@echo "Creation de l'executable..."
 	@$(CC) $(OBJ) $(LIB) -o $(NAME)
-
-obj/ft_ls.o: src/ft_ls.c
 
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
 	@echo "Compilation du fichier "$(KGRN)$(notdir $(subst .c,,$<))$(KNRM)

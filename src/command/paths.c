@@ -12,23 +12,66 @@
 
 #include "ft_ls.h"
 
+static t_file	*delete_paths(t_file *paths)
+{
+	t_file *tmp;
+
+	if (paths == NULL)
+		return (NULL);
+	tmp = NULL;
+	while (paths)
+	{
+		if (tmp != NULL)
+			ft_memdel((void**)&tmp);
+		tmp = paths;
+		paths = paths->next;
+	}
+	ft_memdel((void**)&tmp);
+	return (NULL);
+}
+
+static t_file	*add_current_path()
+{
+	t_file		*paths;
+	struct stat *fileinfo;
+
+	paths = NULL;
+	fileinfo = NULL;
+	if (!(fileinfo = malloc(sizeof(*fileinfo))))
+		return (NULL);
+	if (lstat(".", fileinfo) == -1)
+	{
+		no_such_file_or_directory(".");
+		return (NULL);
+	}
+	add_file_last(&paths, new_file(".", fileinfo));
+
+	return (paths);
+}
+
 static t_file	*add_paths(int argc, char **argv, int i)
 {
 	t_file		*paths;
-	struct stat fileinfo;
+	struct stat *fileinfo;
 
 	paths = NULL;
+	fileinfo = NULL;
+	if (i >= argc)
+		return (add_current_path());
 	while (i < argc)
 	{
-		if (stat((const char*)argv[i], &fileinfo) == -1)
+		if (!(fileinfo = malloc(sizeof(*fileinfo))))
+			return (NULL);
+		if (lstat((const char*)argv[i], fileinfo) == -1)
 		{
 			no_such_file_or_directory(argv[i]);
 			if (ft_strequ("", argv[i]))
-				return (NULL);
+				return (delete_paths(paths));
+			add_file_last(&(paths), new_file(argv[i], NULL));
 			i++;
 			continue ;	
 		}
-		add_file_last(&(paths), new_file(argv[i], fileinfo.st_mtime));
+		add_file_last(&(paths), new_file(argv[i], fileinfo));
 		i++;
 	}
 	return (paths);
@@ -67,10 +110,6 @@ t_file			*set_paths(char *options, int argc, char **argv, int i)
 	set_default_order(argc, argv, i);
 	if (!(paths = add_paths(argc, argv, i)))
 		return (NULL);
-	if (options)
-	{
-
-	}
 	set_file_order(paths, options);
 	return (paths);
 }
