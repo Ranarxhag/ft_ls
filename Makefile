@@ -18,7 +18,8 @@ NAME = ft_ls
 
 SRC_FILES  = ft_ls.c errors.c options.c
 
-SRC_FILES += files/read_file.c files/read_files.c
+SRC_FILES += files/read_file.c files/read_files.c files/columns_length.c \
+			 files/columns_length_extends.c
 
 SRC_FILES += directories/read_directory.c
 

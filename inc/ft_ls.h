@@ -15,6 +15,8 @@
 
 #include <sys/stat.h>
 #include <sys/types.h>
+#include <pwd.h>
+#include <grp.h>
 #include <dirent.h>
 #include <time.h>
 #include "../libft/includes/libft.h"
@@ -41,9 +43,18 @@ typedef struct 		s_wait
 
 typedef struct 		s_command
 {
-	char	*options;
-	t_file	*paths;
+	char			*options;
+	t_file			*paths;
 }					t_command;
+
+typedef struct 		s_column	
+{
+	int				n_link;
+	int				uname;
+	int				gname;
+	int				major;
+	int				minor_or_size;
+}					t_column;
 
 t_command			*set_command(int argc, char **argv);
 void				delete_command(t_command *command);
@@ -73,12 +84,16 @@ int					count_files(t_file *files);
 
 int					read_directory(char *dirname, t_command *command,
 					int newline, int nb_paths);
-int					read_file(t_file *file, t_command *command);
+int					read_file(t_file *file, t_command *command, t_column *clength);
 t_file				*store_files(char *dirname, DIR *dirp, t_command *command);
 int					read_files(t_file *files, char *dirname,
 					t_waiting **waiting, t_command *command);
 t_waiting			*delete_waiting(t_waiting **waiting);
 t_waiting			*new_waiting(char *pathname);
 
+long long			digits_number(long long n);
 t_file				*delete_files(t_file **files);
+t_column			*set_columns_length(t_file *files, t_command *command);
+int					set_min_size_or_minor(t_file *file, t_command *command);
+
 #endif

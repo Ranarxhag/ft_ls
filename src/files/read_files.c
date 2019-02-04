@@ -62,32 +62,42 @@ t_file	*store_files(char *dirname, DIR *dirp, t_command *command)
 	return (files);
 }
 
+void	push_waiting(t_file **tmp, char *dirname, t_waiting **waiting,
+					t_command *command)
+{
+	if (has_option(command->options, 'R') && (*tmp)->infos->st_mode & S_IFDIR
+			&& !ft_strequ((*tmp)->name, ".") && !ft_strequ((*tmp)->name, ".."))
+	{
+		if (!has_option(command->options, 'a') && (*tmp)->name[0] == '.')
+		{
+			*tmp = (*tmp)->next;
+			return ;
+		}
+		add_waiting_last(waiting, new_waiting(
+			ft_strjoin(ft_strjoin(dirname, "/"), (*tmp)->name)));
+	}
+}
+
 int		read_files(t_file *files, char *dirname, t_waiting **waiting,
 					t_command *command)
 {
-	t_file *tmp;
+	t_file		*tmp;
+	t_column	*clength;
 
 	tmp = files;
+	if (!(clength = set_columns_length(files, command)))
+		return (0);
 	while (tmp)
 	{
-		if (!read_file(tmp, command))
+		if (!read_file(tmp, command, clength))
 		{
 			delete_waiting(waiting);
 			delete_files(&files);
 			return (-1);
 		}
-		if (has_option(command->options, 'R') && tmp->infos->st_mode & S_IFDIR
-			&& !ft_strequ(tmp->name, ".") && !ft_strequ(tmp->name, ".."))
-		{
-			if (!has_option(command->options, 'a') && tmp->name[0] == '.')
-			{
-				tmp = tmp->next;
-				continue ;
-			}
-			add_waiting_last(waiting, new_waiting(
-				ft_strjoin(ft_strjoin(dirname, "/"), tmp->name)));
-		}
+		push_waiting(&tmp, dirname, waiting, command);
 		tmp = tmp->next;
 	}
+	ft_memdel((void**)&clength);
 	return (1);
 }
