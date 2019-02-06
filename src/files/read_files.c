@@ -45,6 +45,8 @@ t_file	*store_files(char *dirname, DIR *dirp, t_command *command)
 	fileinfo = NULL;
 	while ((dir = readdir(dirp)))
 	{
+		if (!has_option(command->options, 'a') && dir->d_name[0] == '.')
+			continue ;
 		if (!(fullname = ft_strjoin(ft_strjoin(dirname, "/"), dir->d_name)))
 			return (delete_files(&files));
 		if (!(fileinfo = malloc(sizeof(*fileinfo))))
@@ -65,7 +67,7 @@ t_file	*store_files(char *dirname, DIR *dirp, t_command *command)
 void	push_waiting(t_file **tmp, char *dirname, t_waiting **waiting,
 					t_command *command)
 {
-	if (has_option(command->options, 'R') && (*tmp)->infos->st_mode & S_IFDIR
+	if (has_option(command->options, 'R') && S_ISDIR((*tmp)->infos->st_mode)
 			&& !ft_strequ((*tmp)->name, ".") && !ft_strequ((*tmp)->name, ".."))
 	{
 		if (!has_option(command->options, 'a') && (*tmp)->name[0] == '.')
@@ -85,11 +87,11 @@ int		read_files(t_file *files, char *dirname, t_waiting **waiting,
 	t_column	*clength;
 
 	tmp = files;
-	if (!(clength = set_columns_length(files, command)))
+	if (!(clength = set_columns_length(files, command, 0)))
 		return (0);
 	while (tmp)
 	{
-		if (!read_file(tmp, command, clength))
+		if (!read_file(tmp, command, dirname, clength))
 		{
 			delete_waiting(waiting);
 			delete_files(&files);

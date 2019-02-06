@@ -28,7 +28,6 @@ void	sort_by_date(t_file *files, char *options)
 		files = tmp;
 		while (files->next)
 		{
-			//printf("%s %ld | %s %ld\n", files->name, files->infos->st_mtime, files->next->name, files->next->infos->st_mtime);
 			if (files->infos->st_mtime < files->next->infos->st_mtime)
 			{
 				swap_files(files, files->next);

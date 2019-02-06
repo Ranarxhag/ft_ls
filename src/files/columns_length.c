@@ -25,7 +25,7 @@ long long			digits_number(long long n)
 	return (result);
 }
 
-static int			set_min_nlink(t_file *files, t_command *command)
+static int			set_min_nlink(t_file *files, int only_files)
 {
 	t_file	*tmp;
 	int		max;
@@ -36,7 +36,7 @@ static int			set_min_nlink(t_file *files, t_command *command)
 	result = 0;
 	while (tmp)
 	{
-		if (!has_option(command->options, 'a') && tmp->name[0] == '.')
+		if (!tmp->infos || (only_files && S_ISDIR(tmp->infos->st_mode)))
 		{
 			tmp = tmp->next;
 			continue ;
@@ -49,7 +49,7 @@ static int			set_min_nlink(t_file *files, t_command *command)
 	return (max);
 }
 
-static int			set_min_gname(t_file *files, t_command *command)
+static int			set_min_gname(t_file *files, int only_files)
 {
 	t_file 			*tmp;
 	int				max;
@@ -62,7 +62,7 @@ static int			set_min_gname(t_file *files, t_command *command)
 	result = 0;
 	while (tmp)
 	{
-		if (!has_option(command->options, 'a') && tmp->name[0] == '.')
+		if (!tmp->infos || (only_files && S_ISDIR(tmp->infos->st_mode)))
 		{
 			tmp = tmp->next;
 			continue ;
@@ -78,12 +78,12 @@ static int			set_min_gname(t_file *files, t_command *command)
 	return (max);
 }
 
-static int			set_min_uname(t_file *files, t_command *command)
+static int			set_min_uname(t_file *files, int only_files)
 {
-	t_file 	*tmp;
-	int		max;
-	int		result;
-	struct passwd *pwd;
+	t_file			*tmp;
+	int				max;
+	int				result;
+	struct passwd	*pwd;
 
 	max = 0;
 	tmp = files;
@@ -91,7 +91,7 @@ static int			set_min_uname(t_file *files, t_command *command)
 	result = 0;
 	while (tmp)
 	{
-		if (!has_option(command->options, 'a') && tmp->name[0] == '.')
+		if (!tmp->infos || (only_files && S_ISDIR(tmp->infos->st_mode)))
 		{
 			tmp = tmp->next;
 			continue ;
@@ -107,16 +107,18 @@ static int			set_min_uname(t_file *files, t_command *command)
 	return (max);
 }
 
-t_column			*set_columns_length(t_file *files, t_command *command)
+t_column			*set_columns_length(t_file *files, t_command *command,
+	int only_files)
 {
 	t_column *clength;
 
 	if (!(clength = malloc(sizeof(*clength))))
 		return (NULL);
-	clength->n_link = set_min_nlink(files, command);
-	clength->uname = set_min_uname(files, command);
-	clength->gname = set_min_gname(files, command);
-	clength->minor_or_size = set_min_size_or_minor(files, command);
-	//clength->major = set_major(files, command);
+	if (command) {}
+	clength->n_link = set_min_nlink(files, only_files);
+	clength->uname = set_min_uname(files, only_files);
+	clength->gname = set_min_gname(files, only_files);
+	clength->minor_or_size = set_min_size_or_minor(files, only_files);
+	clength->major = set_min_major(files, only_files);
 	return (clength);
 }

@@ -20,7 +20,7 @@ int		read_arg_dir(t_file *paths, t_command *command, int newline)
 	tmp = paths;
 	while (tmp)
 	{
-		if (tmp->infos && tmp->infos->st_mode & S_IFDIR)
+		if (tmp->infos && S_ISDIR(tmp->infos->st_mode))
 		{
 			if (!(read_directory(tmp->name, command, newline,
 				count_files(paths))))
@@ -36,16 +36,21 @@ int		read_arg_dir(t_file *paths, t_command *command, int newline)
 
 int		read_args_files(t_file *paths, t_command *command)
 {
-	t_file	*tmp;
-	int		count;
+	t_file		*tmp;
+	int			count;
+	t_column	*clength;
+	char		*dirname;
 
 	count = 0;
 	tmp = paths;
+	dirname = NULL;
+	if (!(clength = set_columns_length(tmp, command, 1)))
+		return (-1);
 	while (tmp)
 	{
-		if (tmp->infos && !(tmp->infos->st_mode & S_IFDIR))
+		if (tmp->infos && !S_ISDIR(tmp->infos->st_mode))
 		{
-			read_file(tmp, command);
+			read_file(tmp, command, ".", clength);
 			count++;
 		}
 		tmp = tmp->next;

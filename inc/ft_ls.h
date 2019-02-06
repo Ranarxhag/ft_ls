@@ -84,7 +84,7 @@ int					count_files(t_file *files);
 
 int					read_directory(char *dirname, t_command *command,
 					int newline, int nb_paths);
-int					read_file(t_file *file, t_command *command, t_column *clength);
+int					read_file(t_file *file, t_command *command, char *dirname, t_column *clength);
 t_file				*store_files(char *dirname, DIR *dirp, t_command *command);
 int					read_files(t_file *files, char *dirname,
 					t_waiting **waiting, t_command *command);
@@ -93,7 +93,14 @@ t_waiting			*new_waiting(char *pathname);
 
 long long			digits_number(long long n);
 t_file				*delete_files(t_file **files);
-t_column			*set_columns_length(t_file *files, t_command *command);
-int					set_min_size_or_minor(t_file *file, t_command *command);
+t_column			*set_columns_length(t_file *files, t_command *command,
+					int only_files);
+int					set_min_size_or_minor(t_file *file, int only_files);
+int					set_min_major(t_file *files, int only_files);
+
+char				*read_permissions(t_file *file);
+void				print_filedate(t_file *file);
+char				set_filetype(t_file *file);
+void				print_linked_file(t_file *file, char *dirname);
 
 #endif

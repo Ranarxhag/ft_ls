@@ -49,7 +49,7 @@ static t_file	*add_current_path()
 	return (paths);
 }
 
-static t_file	*add_paths(int argc, char **argv, int i)
+static t_file	*add_paths(int argc, char **argv, char *options, int i)
 {
 	t_file		*paths;
 	struct stat *fileinfo;
@@ -67,10 +67,11 @@ static t_file	*add_paths(int argc, char **argv, int i)
 			no_such_file_or_directory(argv[i]);
 			if (ft_strequ("", argv[i]))
 				return (delete_paths(paths));
-			add_file_last(&(paths), new_file(argv[i], NULL));
-			i++;
+			add_file_last(&(paths), new_file(argv[i++], NULL));
 			continue ;	
 		}
+		if (S_ISLNK(fileinfo->st_mode) && !has_option(options, 'l'))
+			stat((const char*)argv[i], fileinfo);
 		add_file_last(&(paths), new_file(argv[i], fileinfo));
 		i++;
 	}
@@ -108,7 +109,7 @@ t_file			*set_paths(char *options, int argc, char **argv, int i)
 	t_file *paths;
 	
 	set_default_order(argc, argv, i);
-	if (!(paths = add_paths(argc, argv, i)))
+	if (!(paths = add_paths(argc, argv, options, i)))
 		return (NULL);
 	set_file_order(paths, options);
 	return (paths);
